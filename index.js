@@ -20,8 +20,15 @@ function updateTodo(event) {
   input.type = "text";
   input.value = h3Value;
   button.innerText = "수정";
+
   li.appendChild(input);
   li.appendChild(button);
+
+  button.addEventListener("click", rePaintTodo(h3Value));
+}
+
+function rePaintTodo(h3Value) {
+  console.log(h3Value);
 }
 
 function paintTodo(todoObj) {

@@ -4,23 +4,26 @@ const todoList = document.querySelector(".todo");
 
 let arr = [];
 
-function deleteTodo(event, li) {
-  const parentLi = event.target.parentNode;
+function deleteTodo(event) {
+  const li = event.target.parentNode;
+  const target = li.parentNode;
 
-  arr = arr.filter((value) => value.id !== Number(parentLi.id));
-  parentLi.remove();
+  arr = arr.filter((value) => value.id !== Number(target.id));
+  target.remove();
 }
 
 function updateTodo(event) {
-  const li = event.target.parentNode;
-  const h3 = li.querySelector("h3");
-  const h3Value = h3.innerText;
+  const contents = event.target.parentNode;
+  const li = contents.parentNode;
+
+  const div = li.querySelector("div");
+  const h3 = div.querySelector("h3");
   const input = document.createElement("input");
   const button = document.createElement("button");
 
-  h3.style.display = "none";
-  event.target.style.display = "none";
+  div.style.display = "none";
 
+  const h3Value = h3.innerText;
   input.type = "text";
   input.value = h3Value;
   button.innerText = "수정";
@@ -28,11 +31,20 @@ function updateTodo(event) {
   li.appendChild(input);
   li.appendChild(button);
 
-  button.addEventListener("click", () => rePaintTodo(h3Value));
+  button.addEventListener("click", () =>
+    rePaintTodo(contents, input.value, h3)
+  );
 }
 
-function rePaintTodo(h3Value) {
-  console.log(h3Value);
+function rePaintTodo(contents, updateValue, h3) {
+  const contentId = contents.parentNode.id;
+  const updateForm = contents.parentNode;
+  const index = arr.filter((value) => value.id === Number(contentId));
+  index[0].text = updateValue;
+  h3.innerText = updateValue;
+  contents.style.display = "block";
+  updateForm.removeChild(updateForm.lastChild);
+  updateForm.removeChild(updateForm.lastChild);
 }
 
 function paintTodo(todoObj) {
@@ -53,8 +65,8 @@ function paintTodo(todoObj) {
   div.appendChild(button);
   div.appendChild(button2);
 
-  button.addEventListener("click", () => deleteTodo(li));
-  button2.addEventListener("click", () => updateTodo(li));
+  button.addEventListener("click", deleteTodo);
+  button2.addEventListener("click", updateTodo);
 }
 
 function addTodoFnc(event) {

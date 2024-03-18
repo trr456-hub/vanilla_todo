@@ -76,9 +76,15 @@ function addTodoFnc(event) {
     text: inputValue,
     id: Date.now(),
   };
+  todoInput.value = "";
   arr.push(todoObj);
   paintTodo(todoObj);
-  todoInput.value = "";
+  localStorage.setItem("todos", JSON.stringify(arr));
 }
 
 addTodo.addEventListener("click", addTodoFnc);
+
+const local = localStorage.getItem("todos");
+const localParse = JSON.parse(local);
+// const mapping = localParse.map(e);
+console.log(localParse);
